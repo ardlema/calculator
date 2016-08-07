@@ -35,6 +35,7 @@ object Calculator {
       case Literal(l) => l
       case Plus(a, b) => evaluateExpression(a, b, _ + _)
       case Minus(a, b) => evaluateExpression(a, b, _ - _)
+      case Times(a, b) => evaluateExpression(a, b, _ * _)
       case _ => 0
     }
   }
