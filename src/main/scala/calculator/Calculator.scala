@@ -19,7 +19,9 @@ object Calculator {
       case Plus(a, b) => {
         (a, b) match {
           case (Literal(n1), Literal(n2)) => n1 + n2
-          case _ => 0
+          case (expr1, Literal(n2)) => eval(expr1, references) + n2
+          case (Literal(n1), expr2) => n1 + eval(expr2, references)
+          case (expr1, expr2) => eval(expr1, references) + eval(expr2, references)
         }
       }
       case _ => 0
