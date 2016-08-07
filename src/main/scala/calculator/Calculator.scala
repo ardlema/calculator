@@ -31,7 +31,16 @@ object Calculator {
 
     expr match {
       case Literal(l) => l
-      case Ref(ref) => eval(getReferenceExpr(ref, references), references)
+      case Ref(ref) => {
+        references.get(ref).fold[Double] {
+          eval(getReferenceExpr(ref, references), references)
+        } { (exprSignal: Signal[Expr]) =>
+            exprSignal() match {
+              case Ref(ref2) if (ref.equals(ref2)) => Double.NaN
+              case _ => eval(getReferenceExpr(ref, references), references)
+          }
+        }
+      }
       case Plus(a, b) => evaluateExpression(a, b, _ + _)
       case Minus(a, b) => evaluateExpression(a, b, _ - _)
       case Times(a, b) => evaluateExpression(a, b, _ * _)

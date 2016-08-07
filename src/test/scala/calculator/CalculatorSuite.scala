@@ -96,6 +96,14 @@ class CalculatorSuite extends FunSuite with ShouldMatchers {
     assert(Calculator.eval(ref, references) == 4)
   }
 
+  test("eval simple cyclic dependencies") {
+    val ref = Ref("a")
+    val signal = Signal[Expr](Ref("a"))
+    val references = Map(("a", signal))
+
+    assert(Calculator.eval(ref, references).isNaN)
+  }
+
   test("compute simple values") {
     val signalExpression = Signal[Expr] { Literal(1) }
     val expressions = Map(("a", signalExpression))
