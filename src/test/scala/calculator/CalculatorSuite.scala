@@ -33,7 +33,6 @@ class CalculatorSuite extends FunSuite with ShouldMatchers {
     assert(result() == MaxTweetLength - tweetLength("foo blabla \uD83D\uDCA9 bar"))
   }
 
-
   test("colorForRemainingCharsCount with a constant signal") {
     val resultGreen1 = TweetLength.colorForRemainingCharsCount(Var(52))
     assert(resultGreen1() == "green")
@@ -51,4 +50,11 @@ class CalculatorSuite extends FunSuite with ShouldMatchers {
     assert(resultRed2() == "red")
   }
 
+  test("eval simple Plus expression") {
+    val a = Literal(2)
+    val b = Literal(3)
+    val sum = Plus(a, b)
+
+    assert(Calculator.eval(sum, Map()) == 5)
+  }
 }
