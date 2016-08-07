@@ -16,8 +16,7 @@ object Calculator {
     })
 
   def eval(expr: Expr, references: Map[String, Signal[Expr]]): Double = {
-    def evaluateExpression(a: Expr, b: Expr, operation: (Double, Double) => Double): Double = {
-      (a, b) match {
+    def evaluateExpression(a: Expr, b: Expr, operation: (Double, Double) => Double): Double = (a, b) match {
         case (Literal(n1), Literal(n2)) => operation(n1, n2)
         case (Literal(n1), Ref(variable)) => operation(n1, eval(getReferenceExpr(variable, references),
           references))
@@ -29,7 +28,6 @@ object Calculator {
         case (expr1, Literal(n2)) => operation(eval(expr1, references), n2)
         case (expr1, expr2) => operation(eval(expr1, references), eval(expr2, references))
       }
-    }
 
     expr match {
       case Literal(l) => l
@@ -38,7 +36,6 @@ object Calculator {
       case Minus(a, b) => evaluateExpression(a, b, _ - _)
       case Times(a, b) => evaluateExpression(a, b, _ * _)
       case Divide(a, b) => evaluateExpression(a, b, _ / _)
-      case _ => 0
     }
   }
 
