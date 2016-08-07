@@ -80,6 +80,14 @@ class CalculatorSuite extends FunSuite with ShouldMatchers {
     assert(Calculator.eval(times, Map()) == 6)
   }
 
+  test("eval simple Divide expression") {
+    val a = Literal(9)
+    val b = Literal(3)
+    val divide = Divide(a, b)
+
+    assert(Calculator.eval(divide, Map()) == 3)
+  }
+
   test("compute simple values") {
     val signalExpression = Signal[Expr] { Literal(1) }
     val expressions = Map(("a", signalExpression))
