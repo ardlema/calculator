@@ -12,7 +12,9 @@ object Polynomial {
     Signal {
       if (delta() < 0) Set.empty
       else {
-        Set(1)
+        val value1 = (-b() + Math.sqrt(delta())) / (2 * a())
+        val value2 = (-b() - Math.sqrt(delta())) / (2 * a())
+        Set(value1, value2)
       }
     }
   }

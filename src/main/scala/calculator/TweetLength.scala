@@ -13,11 +13,15 @@ object TweetLength {
     Signal {
       val currentValue = remainingCharsCount()
       currentValue match {
-        case x if (x >= 15) => "green"
-        case y if (0 <= y && y < 15) => "orange"
+        case x if greaterThanFifteen(x) => "green"
+        case y if betweenZeroAndFifteen(y) => "orange"
         case _ => "red"
       }
     }
+
+  def greaterThanFifteen(x: Int) = x >= 15
+
+  def betweenZeroAndFifteen(x: Int) = (0 <= x && x < 15)
 
 
   /** Computes the length of a tweet, given its text string.
