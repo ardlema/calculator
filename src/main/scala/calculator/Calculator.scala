@@ -33,6 +33,7 @@ object Calculator {
 
     expr match {
       case Literal(l) => l
+      case Ref(ref) => eval(getReferenceExpr(ref, references), references)
       case Plus(a, b) => evaluateExpression(a, b, _ + _)
       case Minus(a, b) => evaluateExpression(a, b, _ - _)
       case Times(a, b) => evaluateExpression(a, b, _ * _)
