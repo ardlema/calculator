@@ -16,26 +16,16 @@ object Calculator {
     })
 
   def eval(expr: Expr, references: Map[String, Signal[Expr]]): Double = {
-    def evaluateExpression(a: Expr, b: Expr, operation: (Double, Double) => Double): Double = (a, b) match {
-        case (Literal(n1), Literal(n2)) => operation(n1, n2)
-        case (Literal(n1), Ref(variable)) => operation(n1, eval(getReferenceExpr(variable, references),
-          references))
-        case (Ref(variable), Literal(n1)) => operation(eval(getReferenceExpr(variable, references), references), n1)
-        case (Ref(variable1), Ref(variable2)) => operation(
-          eval(getReferenceExpr(variable1, references), references),
-            eval(getReferenceExpr(variable2, references), references))
-      }
-
     expr match {
       case Literal(l) => l
       case Ref(name) => {
         val ref = getReferenceExpr(name, references)
         eval(ref, references - name)
       }
-      case Plus(a, b) => evaluateExpression(a, b, _ + _)
-      case Minus(a, b) => evaluateExpression(a, b, _ - _)
-      case Times(a, b) => evaluateExpression(a, b, _ * _)
-      case Divide(a, b) => evaluateExpression(a, b, _ / _)
+      case Plus(a, b) => eval(a, references) + eval(b, references)
+      case Minus(a, b) => eval(a, references) - eval(b, references)
+      case Times(a, b) => eval(a, references) * eval(b, references)
+      case Divide(a, b) => eval(a, references) / eval(b, references)
     }
   }
 
