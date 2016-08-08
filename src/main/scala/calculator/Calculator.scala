@@ -24,22 +24,13 @@ object Calculator {
         case (Ref(variable1), Ref(variable2)) => operation(
           eval(getReferenceExpr(variable1, references), references),
             eval(getReferenceExpr(variable2, references), references))
-        case (Literal(n1), expr2) => operation(n1, eval(expr2, references))
-        case (expr1, Literal(n2)) => operation(eval(expr1, references), n2)
-        case (expr1, expr2) => operation(eval(expr1, references), eval(expr2, references))
       }
 
     expr match {
       case Literal(l) => l
-      case Ref(ref) => {
-        references.get(ref).fold[Double] {
-          eval(getReferenceExpr(ref, references), references)
-        } { (exprSignal: Signal[Expr]) =>
-            exprSignal() match {
-              case Ref(ref2) if (ref.equals(ref2)) => Double.NaN
-              case _ => eval(getReferenceExpr(ref, references), references)
-          }
-        }
+      case Ref(name) => {
+        val ref = getReferenceExpr(name, references)
+        eval(ref, references - name)
       }
       case Plus(a, b) => evaluateExpression(a, b, _ + _)
       case Minus(a, b) => evaluateExpression(a, b, _ - _)
